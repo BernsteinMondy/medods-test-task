@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=0.0.0.0
+      - DB_PORT=5432
+      - DB_USER=auth_user
+      - DB_PASSWORD=auth_pass
+      - DB_NAME=auth_db
+      - TOKEN_SERVICE_SECRET_KEY=the_most_secret_key
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:17.2
+    environment:
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_DB=dev
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:
